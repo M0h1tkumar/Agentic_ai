@@ -1,0 +1,14 @@
+Difference between Closed source model vs open source open weight models:
+
+Well closed source models are complete blackbox. You do not have access to its weights (learned knowledge) or code at all.
+Users can access them through API.
+They are highly polished and continously updated with cutting edge capabilities.
+Users cannot train/tune the model. Their access is limited by tokens consumed.
+
+Open Weight models are downloadable. Their weight are public but their underlying code is not.
+Users can train/tune these models and they offer better privacy these models run locally.
+But the infrastructure to run this expensive. They are not updated as regularly as closed source ones.
+
+Open Source Open Weight models are fully available to public. Their code as well as weights are downloadable. 
+Any user can download the model, tweak the code and then train/tune the model as necessary.
+The only disadvantage is its availability due to competitive reasons.
