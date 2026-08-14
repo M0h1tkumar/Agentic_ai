@@ -1,0 +1,32 @@
+# API vs MCP: Differences and Limitations of APIs
+
+## Introduction
+
+Application Programming Interfaces (APIs) and Model Context Protocol (MCP) are both mechanisms that enable software systems to communicate with external services and resources. However, they are designed for different purposes. An **API** provides a predefined interface through which one application can request data or perform specific operations from another application. **MCP**, on the other hand, is an open protocol designed to standardize how AI models and applications discover and interact with external tools, data sources, and services.
+
+## API vs MCP
+
+In a traditional API-based architecture, a developer needs to understand the API documentation, available endpoints, request formats, authentication methods, parameters, and response structures. For example, a weather API may provide endpoints such as `/current-weather` or `/forecast`. The application must explicitly call the appropriate endpoint with the required parameters.
+
+MCP introduces a more AI-oriented approach. An MCP server exposes **tools, resources, and prompts** in a standardized format. An AI application can discover these capabilities and determine which tool is appropriate for a particular task. Instead of developers manually integrating every individual service directly into an AI application, MCP provides a common communication layer between the AI application and external capabilities.
+
+| Aspect          | API                                               | MCP                                           |
+| --------------- | ------------------------------------------------- | --------------------------------------------- |
+| Primary purpose | Application-to-application communication          | AI-to-tool/resource communication             |
+| Interface       | Endpoints and HTTP methods                        | Tools, resources, and prompts                 |
+| Discovery       | Usually requires documentation/manual integration | Capabilities can be discovered dynamically    |
+| AI integration  | Requires custom implementation                    | Designed specifically for AI applications     |
+| Standardization | Depends on API design                             | Standardized protocol for AI tool interaction |
+| Reusability     | Often requires separate integrations              | One MCP client can work with many MCP servers |
+
+## Drawbacks of APIs Compared with MCP
+
+The major drawback of traditional APIs in AI systems is **integration complexity**. If an AI application needs to interact with ten different services, developers may need to build and maintain ten separate integrations. Each API can have different authentication mechanisms, request formats, response structures, error handling, and documentation.
+
+APIs also generally do not provide a standardized mechanism for an AI model to **discover what capabilities are available and decide how to use them**. The developer typically has to hard-code the available endpoints and describe their usage to the AI system.
+
+Another limitation is **context and tool management**. APIs primarily expose operations, while MCP is designed around exposing capabilities to AI applications in a structured and discoverable way. This makes MCP particularly useful for agentic systems where an AI model needs to select and invoke different tools dynamically.
+
+## Conclusion
+
+APIs remain fundamental for software communication and are often the underlying technology used by MCP servers themselves. MCP should therefore not be viewed as a complete replacement for APIs. Instead, MCP provides a **standardized abstraction layer for AI applications**, making it easier for models and agents to discover and interact with external tools and resources. The key advantage of MCP is not simply that it communicates with services, but that it standardizes **how AI systems understand, discover, and use those capabilities**. Consequently, MCP can significantly reduce custom integration work when building AI-powered and agentic applications.
