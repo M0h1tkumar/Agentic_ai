@@ -1,0 +1,65 @@
+Q1--> What is the difference between STDIO and Streamable HTTP??
+
+Ans-->> # Difference Between STDIO and Streamable HTTP in MCP
+
+## Introduction
+
+In the **Model Context Protocol (MCP)**, a transport mechanism is used to establish communication between an MCP client and an MCP server. Two commonly used transport methods are **STDIO** and **Streamable HTTP**. Both allow the client and server to exchange MCP messages, but they differ in how the communication takes place and where the server can be hosted.
+
+## 1. STDIO
+
+**STDIO (Standard Input/Output)** is a transport method where the MCP client communicates with an MCP server through the server process's standard input (`stdin`) and standard output (`stdout`).
+
+When an MCP client starts a local MCP server, the server runs as a process on the same machine. The client sends requests through `stdin`, and the server sends responses through `stdout`.
+
+### Advantages of STDIO
+
+* Simple and easy to configure.
+* Suitable for local MCP servers.
+* Does not require network communication.
+* Generally has low communication overhead.
+* Useful for development and locally installed tools.
+
+### Disadvantages of STDIO
+
+* Mainly suitable for local client-server communication.
+* The server process generally needs to be started by the client.
+* Not as convenient when many remote clients need to access the same server.
+
+## 2. Streamable HTTP
+
+**Streamable HTTP** is an MCP transport method that uses the **HTTP protocol** for communication between the MCP client and server. The MCP server runs as an HTTP service and can be accessed through a network.
+
+The client sends MCP requests using HTTP, and the server returns responses over the HTTP connection. It can also support streaming responses when required.
+
+### Advantages of Streamable HTTP
+
+* Supports communication with remote MCP servers.
+* Suitable for web and cloud-based applications.
+* Multiple clients can access a server.
+* Can use standard HTTP security and authentication mechanisms.
+* Better suited for deploying MCP servers as network services.
+
+### Disadvantages of Streamable HTTP
+
+* More configuration is required compared with STDIO.
+* Network connectivity is required for remote communication.
+* Authentication, security, and HTTP configuration may need to be managed.
+
+## Difference Between STDIO and Streamable HTTP
+
+| Feature          | STDIO                                 | Streamable HTTP                   |
+| ---------------- | ------------------------------------- | --------------------------------- |
+| Communication    | stdin/stdout                          | HTTP                              |
+| Server location  | Usually local                         | Local or remote                   |
+| Network required | No                                    | Yes for remote communication      |
+| Configuration    | Simple                                | More configuration required       |
+| Multiple clients | Less suitable                         | Well suited                       |
+| Authentication   | Usually handled outside the transport | Can use HTTP authentication       |
+| Best suited for  | Local MCP tools                       | Remote and web-based MCP services |
+
+## Conclusion
+
+The main difference between **STDIO and Streamable HTTP** is the way the MCP client and server communicate. **STDIO uses standard input and output and is mainly designed for simple local communication**, while **Streamable HTTP uses HTTP and is better suited for remote, network-based, and multi-client applications**.
+
+Therefore, STDIO is generally preferred when an MCP server is running locally on the same computer, whereas Streamable HTTP is more appropriate when the MCP server needs to be accessed over a network or deployed as a web service.
