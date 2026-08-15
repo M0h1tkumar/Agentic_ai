@@ -9,7 +9,7 @@ Welcome to my personal progress tracker and repository for the **Agentic AI Cour
 | Category | Total Tasks | Completed | Status |
 | :--- | :---: | :---: | :---: |
 | 📄 **GitHub Research Papers** | 8 | 8 | 🟢 **100% Completed** |
-| 🛠️ **Practical / Hands-On Tasks** | 8 | 2 | 🟡 **25% (AnythingLLM & Multica Core Completed)** |
+| 🛠️ **Practical / Hands-On Tasks** | 8 | 5 | 🟢 **62.5% Completed** |
 
 ---
 
@@ -52,26 +52,29 @@ Below is the roadmap and real-time completion status for all hands-on environmen
 ---
 
 ### Task 2: Markdown (`.md`) File Conversion
-- [ ] MarkItDown / Docling installation & setup
-- [ ] Python script for converting `.pdf`, `.docx`, etc. to clean `.md`
-- [ ] Connect automated Markdown pipeline to AnythingLLM
-> **Status:** ⏳ **Pending**
+- [x] MarkItDown / Docling installation & setup
+- [x] Python script for converting `.pdf`, `.docx`, etc. to clean `.md`
+- [x] Connect automated Markdown pipeline to AnythingLLM
+> **Status:** ✅ **Completed**
 
 ---
 
 ### Task 3: Local LLM Execution Runtimes
-- [ ] LM Studio setup & GGUF model loading
-- [ ] Jan Desktop local inference test
-- [ ] OpenHands autonomous coding agent environment configuration
-> **Status:** ⏳ **Pending**
+- [x] LM Studio setup & GGUF model loading
+- [x] Jan Desktop local inference test
+- [x] OpenHands autonomous coding agent environment configuration
+> **Status:** ✅ **Completed**
 
 ---
 
-### Task 4: Model Fine-Tuning with Unsloth
-- [ ] Dataset selection & cleaning
-- [ ] Base model selection (LLaMA 3.1 8B / Qwen 2.5)
-- [ ] Model fine-tuning run (Google Colab / Unsloth Studio)
-> **Status:** ⏳ **Pending**
+### Task 4: Model Fine-Tuning with Unsloth (SupportSense Project)
+- [x] Dataset selection & formatting: **BANKING77** dataset (1,000 train / 300 test examples)
+- [x] Base model selection & quantization: **Qwen2.5-7B-Instruct** with **Unsloth** & **QLoRA** (4-bit quantization)
+- [x] Parameter Efficiency: 40.37M trainable parameters (0.53% of 7.65B total parameters)
+- [x] Model fine-tuning run: Google Colab Tesla T4 GPU (~12 min, 2 epochs)
+- [x] Evaluation Accuracy: **91.67% test accuracy** (275 / 300 test examples correctly classified)
+- [x] Project Architecture: [`SupportSense-FineTuning/`](file:///c:/Users/ANIL/Desktop/Agentic_ai/Team_Ritu/Anil_Pradhan/SupportSense-FineTuning/) (`dataset/`, `evaluation/`, `model/`, `notebooks/`, `outputs/`, `requirements.txt`, `.gitignore`)
+> **Status:** ✅ **Completed**
 
 ---
 
@@ -111,7 +114,7 @@ Below is the roadmap and real-time completion status for all hands-on environmen
   - [ ] `Definition_Agent`: Define 'ubiquitous' and provide an example sentence
   - [ ] `HackerNews_Digest_Agent`: Retrieve top 5 Hacker News stories with scores
   - [ ] `GitHub_Repo_Agent`: Open issues count and 3 most recently updated issues for `anthropics/claude-code`
-  - [ ] `Create a Squad including the other agents so that the Orchestrator Agent can coordinate their tasks
+  - [ ] `Create a Squad including the other agents so that the Orchestrator Agent can coordinate their tasks`
 > **Status:** ⏳ **In Progress / Pending**
 
 ---
@@ -121,6 +124,15 @@ Below is the roadmap and real-time completion status for all hands-on environmen
 ```
 Team_Ritu/Anil_Pradhan/
 ├── README.md                                  # Workspace overview & task tracker
+├── SupportSense-FineTuning/                   # Task 4: SupportSense LLM Fine-Tuning Project
+│   ├── dataset/                               # BANKING77 dataset documentation
+│   ├── evaluation/                            # 91.67% evaluation accuracy specs
+│   ├── model/                                 # Qwen2.5-7B base model & LoRA adapter specs
+│   ├── notebooks/                             # SupportSense_FineTuning.ipynb
+│   ├── outputs/                               # LoRA adapter checkpoint docs
+│   ├── requirements.txt                       # Project dependencies
+│   ├── .gitignore                             # Ignore rules for models & .venv
+│   └── README.md                              # SupportSense project README
 └── Tasks_Github/                              # Research Papers & Documentation
     ├── 1-chatbot_Vs_Aiagents.md               # Task 1 Paper
     ├── 2-privacy_policies_of_llms.md          # Task 2 Paper

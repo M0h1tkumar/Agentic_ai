@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment / secrets
+.env
+.env.*
+
+# Large model files
+*.safetensors
+*.bin
+*.gguf
+*.pt
+*.pth
+
+# Training outputs / checkpoints
+outputs/checkpoint-*/
+
+# Local caches
+.cache/
+huggingface/
