@@ -1,0 +1,181 @@
+Research About MCP
+
+MCP stands for Model Context Protocol. It is an open standard designed to provide a standardized way for AI applications to connect with external data sources, tools, and services.
+
+Instead of creating a separate integration for every AI application and every external service, MCP provides a common protocol through which an AI application can communicate with MCP servers.
+
+Basic architecture:
+
+User
+↓
+AI Application / MCP Host
+↓
+MCP Client
+↓
+MCP Server
+↓
+External Tool / API / Database / File System
+
+For example, an AI assistant may need to access GitHub, a database, local files, or a weather API. An MCP server can expose these capabilities to the AI application through a standardized interface.
+
+Why MCP is needed:
+
+Without MCP, an AI application may need custom code for every external service.
+
+For example:
+
+AI Application → Custom GitHub integration
+AI Application → Custom Database integration
+AI Application → Custom File System integration
+AI Application → Custom API integration
+
+With MCP:
+
+AI Application → MCP → GitHub MCP Server
+→ Database MCP Server
+→ File System MCP Server
+→ API MCP Server
+
+This makes integrations more standardized and reusable.
+
+Main Components of MCP:
+
+MCP Host
+
+The host is the AI application that provides the overall environment in which MCP is used.
+
+Examples can include AI assistants, IDEs, or agent applications.
+
+MCP Client
+
+The MCP client is the component inside the host application that establishes communication with an MCP server.
+
+A client selects an appropriate transport such as STDIO or Streamable HTTP and communicates with the server using the MCP protocol.
+
+MCP Server
+
+An MCP server provides capabilities to the AI application.
+
+An MCP server can expose:
+
+Tools
+Resources
+Prompts
+Other protocol capabilities
+
+Tools:
+
+Tools are executable functions that an AI application can call.
+
+Examples:
+
+Search the web.
+Query a database.
+Read or modify files.
+Create a GitHub issue.
+Send an email.
+Execute a particular operation in an external service.
+
+Resources:
+
+Resources provide data or context to an AI application.
+
+Examples:
+
+Files
+Database information
+Documents
+API data
+Application information
+
+Prompts:
+
+Prompts are reusable prompt templates that can help standardize interactions with an MCP server.
+
+MCP Communication:
+
+MCP uses structured protocol messages based on JSON-RPC. The client and server communicate through a transport layer.
+
+The two important standard transports are:
+
+STDIO – mainly for local, process-based integrations.
+Streamable HTTP – mainly for remote MCP servers.
+
+The older HTTP + SSE transport exists for backward compatibility, but new implementations should prefer Streamable HTTP.
+
+Example of MCP workflow:
+
+Suppose a user asks:
+
+"Find the latest information from my project database."
+
+The workflow can be:
+
+User sends the request to an AI application.
+The AI determines that a database tool is required.
+The MCP client communicates with the appropriate MCP server.
+The MCP server calls the database tool.
+The database returns the requested information.
+The MCP server sends the result back through MCP.
+The AI uses the result to generate the final response.
+
+Benefits of MCP:
+
+Standardized AI-to-tool communication.
+Reduces the need for custom integrations.
+Makes tools reusable across different AI applications.
+Allows AI systems to access external data and services.
+Supports local and remote deployments.
+Makes agentic AI systems more capable.
+Provides a common architecture for tools, resources and prompts.
+Helps developers build modular AI applications.
+
+Real-world examples:
+
+An MCP server could provide access to:
+
+GitHub
+PostgreSQL/MySQL databases
+Local file systems
+Cloud services
+Search engines
+APIs
+Development tools
+Project management systems
+
+MCP and Agentic AI:
+
+MCP is especially useful for agentic AI because agents often need to perform actions outside the language model itself.
+
+For example:
+
+User:
+"Check my GitHub repository, find open issues and create a summary."
+
+An agent could use:
+
+LLM
+↓
+MCP Client
+↓
+GitHub MCP Server
+↓
+GitHub API
+↓
+Repository data
+↓
+MCP Client
+↓
+LLM
+↓
+Summary
+
+The LLM does not directly need to implement every GitHub API operation. The MCP server provides standardized tools that the agent can use.
+
+Current MCP Direction:
+
+The MCP specification continues to evolve. The July 28, 2026 specification introduced a stateless protocol core, Multi Round-Trip Requests (MRTR), header-based routing, cacheable list results, authorization improvements and other changes. The protocol also continues to identify STDIO and Streamable HTTP as the standard transports, with Streamable HTTP being the modern choice for remote deployments.
+
+Conclusion:
+
+Model Context Protocol is an open standard that allows AI applications to communicate with external tools, data sources and services in a standardized manner. It is an important technology for building agentic AI systems because it allows AI agents to interact with the real world instead of only generating text.
