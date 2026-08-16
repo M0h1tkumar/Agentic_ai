@@ -1,0 +1,64 @@
+API = a way for software to communicate.
+MCP = a standardized way for AI models/agents to use tools and data.
+
+| Feature           | API                               | MCP                             |
+| ----------------- | --------------------------------- | ------------------------------- |
+| Full form         | Application Programming Interface | Model Context Protocol          |
+| Main purpose      | Connect software/services         | Connect AI models to tools/data |
+| Used by           | Any application                   | Mainly AI agents/LLMs           |
+| Standardization   | Each API has its own design       | MCP provides a common protocol  |
+| Example           | REST API, Gemini API              | MCP server exposing tools       |
+| AI tool discovery | Usually you implement it yourself | Built into the MCP approach     |
+| Communication     | App ↔ Service                     | AI ↔ MCP server ↔ Tool/Service  |
+
+Using an API
+Your App
+   ↓
+Weather API
+   ↓
+Weather Service
+
+
+Using MCP
+AI Agent
+   ↓
+MCP
+   ↓
+Weather MCP Server
+   ↓
+Weather API
+
+
+The important difference
+
+Think of API as the actual door to a service.
+
+Think of MCP as a standardized adapter/interface that lets an AI agent discover and use those doors as tools.
+
+For example:
+
+             API
+AI ───────────────────→ Google/GitHub/Database
+
+             MCP
+AI ──→ MCP Server ──→ API/Database/File/System
+MCP doesn't replace APIs. An MCP server can actually use APIs internally.
+
+
+for openclaw:
+OpenClaw Agent
+      ↓
+     MCP
+      ↓
+   MCP Server
+      ↓
+ APIs / Databases / Files / External Tools
+
+"APIs allow applications to communicate with services, but MCP provides a standardized interface specifically for AI agents to discover and use tools, resources, and external context. MCP can also sit on top of existing APIs rather than replacing them."
+
+
+
+
+
+
+
