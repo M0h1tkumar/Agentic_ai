@@ -1,0 +1,7 @@
+# No third-party dependencies.
+#
+# bhubaneswar_weather.py deliberately uses only the Python standard library
+# (urllib.request, json, argparse, dataclasses) so it runs on any Python 3.9+
+# install with nothing to install and no supply-chain surface.
+#
+# This file exists so the intent is explicit rather than accidental.

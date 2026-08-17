@@ -1,0 +1,4 @@
+# No dependencies. skillscan uses the Python standard library only.
+#
+# Tests:
+# pytest>=8.0

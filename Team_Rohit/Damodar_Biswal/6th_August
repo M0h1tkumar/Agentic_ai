@@ -1,0 +1,36 @@
+Q--> 1. What is the difference between API and MCP (also write the drawback of API over MCP) in ddetails?
+
+API (Application Programming Interface) and MCP (Model Context Protocol) are both used to connect software with external services, but their purpose is different.
+
+API
+
+An API is a set of rules that allows one software application to communicate with another application or service. For example, a weather application can use a Weather API to get the current temperature of a city.
+
+Flow:
+Application → API → External Service → Response
+
+APIs are mainly designed for developers and applications.
+
+MCP
+
+MCP stands for Model Context Protocol. It is a standardized protocol designed for AI models and AI agents to connect with external tools, data, and services.
+
+For example, an AI agent can use MCP to access files, databases, GitHub, web search, or other tools.
+
+Flow:
+AI Agent → MCP → Tool/Service
+
+| API                                 | MCP                                          |
+| ----------------------------------- | -------------------------------------------- |
+| General communication interface     | AI-focused communication protocol            |
+| Mainly used by applications         | Mainly used by AI agents                     |
+| Usually requires custom integration | Provides a standardized way to connect tools |
+| Tool discovery is not standardized  | Supports tool discovery                      |
+| Not specifically designed for AI    | Designed specifically for AI applications    |
+| Examples: REST, GraphQL APIs        | MCP servers and MCP tools                    |
+
+
+
+Important Point:
+
+MCP does not replace APIs. In many cases, MCP works on top of APIs.

@@ -1,0 +1,7 @@
+.env
+output/
+input/
+__pycache__/
+*.pyc
+.pytest_cache/
+.docmd-manifest.json

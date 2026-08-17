@@ -1,0 +1,12 @@
+# Dataset preparation: standard library only.
+#
+# Training (GPU environment / Colab only):
+# unsloth
+# trl>=0.9
+# peft>=0.11
+# accelerate
+# bitsandbytes
+# datasets
+#
+# Tests:
+# pytest>=8.0

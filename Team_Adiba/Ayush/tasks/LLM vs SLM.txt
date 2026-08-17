@@ -1,0 +1,70 @@
+================================================================================
+ASSIGNMENT NOTES: LLM VS SLM (LARGE VS SMALL LANGUAGE MODELS)
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 24 July 2026
+================================================================================
+
+1. QUICK DEFINITIONS
+--------------------
+- Large Language Models (LLMs): Huge models with tens to hundreds of billions of parameters (70B, 405B, 1T+). They require cloud server clusters but have deep reasoning and broad world knowledge.
+- Small Language Models (SLMs): Compact models with 1B to 10B parameters (e.g. Phi-3 3.8B, Llama 3 8B, Gemma 2B). Designed to run fast locally on consumer laptops, phones, and edge devices.
+
+--------------------------------------------------------------------------------
+
+2. CORE TECHNICAL DIFFERENCES
+-----------------------------
+
+Metric                Large Language Model (LLM)    Small Language Model (SLM)
+--------------------  ----------------------------  ----------------------------
+Parameter Scale       70B to 1 Trillion+            1B to 10B
+VRAM Requirement      140 GB to 1 TB+ (Multi-GPU)   2 GB to 6 GB (Single GPU/Phone)
+Inference Latency     Moderate (50ms - 200ms TTFT)  Ultra-Fast (<15ms TTFT)
+Inference Speed       20 - 50 tokens/sec            80 - 150+ tokens/sec
+Deployment Target     Cloud Data Centers            Edge Devices, Laptops, Mobile
+Data Privacy          Transmits to Cloud API        100% Local / On-Device
+Fine-Tuning Cost      Expensive ($1,000s+)          Cheap ($5 - $50 on single GPU)
+
+--------------------------------------------------------------------------------
+
+3. PROS & CONS
+--------------
+
+LLM Pros & Cons:
++ Handles complex multi-step logic, math, and open-ended coding.
++ Huge general knowledge out of the box.
+- High cost per token and higher latency.
+- Cannot run locally on edge hardware.
+
+SLM Pros & Cons:
++ Runs completely offline on laptops/phones with zero data leakage.
++ Super fast token speeds and very low operational cost.
++ Can be fine-tuned to beat larger models on specific narrow tasks.
+- Limited broad world knowledge outside its domain.
+- Struggles with complex multi-step math/logic.
+
+--------------------------------------------------------------------------------
+
+4. ARCHITECTURAL PATTERN: THE HYBRID ROUTER
+-------------------------------------------
+Modern enterprise apps don't pick just one—they combine both using a Hybrid Router!
+
+[User Prompt] ---> [Smart Router]
+                      |
+                      +---> Simple Query (90%) ---> Fast Local SLM (Phi-3 / Llama 8B)
+                      |
+                      +---> Complex Logic (10%) --> Cloud LLM (GPT-4o / Claude 3.5)
+
+This cuts cloud API bills by 80%+ while keeping response times lightning fast!
+
+--------------------------------------------------------------------------------
+
+5. MY PERSONAL TAKEAWAY
+----------------------
+LLMs are like supercomputers in the cloud, while SLMs are like fast, lightweight engines on your phone. Using an SLM for daily tasks and escalating heavy reasoning to an LLM is the smartest design pattern.
+
+References:
+- Microsoft Research Phi-3 Technical Report
+- Google Gemma Open Models Paper
+- Meta Llama 3 Model Architecture Summary
+================================================================================

@@ -1,0 +1,13 @@
+# Core: none. docmd runs on the Python standard library alone, using its
+# built-in plaintext engine for text, CSV, JSON, HTML, and XML.
+#
+# Install one or both engines below to handle PDF, DOCX, PPTX and XLSX.
+
+# Broad format coverage, fast. The usual first choice.
+markitdown>=0.0.1a2
+
+# Better tables, reading order, and complex PDF layout. Slower, heavier.
+# docling>=2.0.0
+
+# Tests only:
+# pytest>=8.0

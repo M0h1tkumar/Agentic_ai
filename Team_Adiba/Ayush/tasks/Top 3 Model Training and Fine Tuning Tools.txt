@@ -1,0 +1,64 @@
+================================================================================
+ASSIGNMENT NOTES: TOP 3 MODEL TRAINING & FINE-TUNING TOOLS
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 24 July 2026
+================================================================================
+
+1. INTRODUCTION
+---------------
+Fine-tuning lets you take a pre-trained LLM (like Llama or Mistral) and customize it on your own specific dataset. Here are notes on the top 3 tools currently used by developers and researchers:
+
+--------------------------------------------------------------------------------
+
+2. TOOL BREAKDOWN
+-----------------
+
+TOOL 1: HUGGING FACE ECOSYSTEM (Transformers, PEFT, TRL, Accelerate)
+- Overview: The gold standard ecosystem for Machine Learning. Uses transformers (models), peft (LoRA/QLoRA), trl (SFT & DPO training), and accelerate (multi-GPU setup).
+- Best Features: Access to 500,000+ models on HF Hub, native DPO/PPO/SFT trainers, FSDP & DeepSpeed support.
+- Pros: Massive community, works with almost every model architecture.
+- Cons: Requires python code setup; default memory usage is higher than specialized tools.
+- Best For: General AI research, enterprise pipelines, and complex model architectures.
+
+TOOL 2: UNSLOTH
+- Overview: An ultra-fast, memory-optimized fine-tuning framework that rewrites PyTorch backpropagation into custom OpenAI Triton kernels.
+- Best Features: 2x to 5x faster training speeds, 80% VRAM reduction with ZERO accuracy loss.
+- Pros: Super fast, runs fine-tuning on free Google Colab or single consumer GPUs (RTX 3090/4090).
+- Cons: Focuses mainly on single-GPU setups and popular model families (Llama, Mistral, Gemma, Qwen).
+- Best For: Beginners, solo developers, and fast iteration on limited hardware.
+
+TOOL 3: AXOLOTL
+- Overview: A declarative, YAML-driven framework for configuring LLM fine-tuning without writing boilerplate Python code.
+- Best Features: Clean YAML config files for datasets, hyperparameters, LoRA settings, DeepSpeed, and FlashAttention-2.
+- Pros: Highly reproducible recipes, easy multi-GPU cluster scaling.
+- Cons: Learning curve for formatting complex YAML configs.
+- Best For: Enterprise MLOps teams, automated training pipelines, and multi-GPU clusters.
+
+--------------------------------------------------------------------------------
+
+3. COMPARISON TABLE
+-------------------
+
+Feature               Hugging Face            Unsloth                 Axolotl
+--------------------  ----------------------  ----------------------  ----------------------
+Primary Interface     Python Code / API       Python / Notebooks      YAML Configuration
+Training Speed        Baseline                2x to 5x FASTER         Fast
+VRAM Efficiency       Standard PEFT           80% VRAM Reduction      High (FlashAttention)
+Multi-GPU Scaling     Excellent (DeepSpeed)   Single GPU Focused      Excellent (DeepSpeed)
+Model Support         Universal (500k+)       Popular Open Models     Broad Open Models
+Setup Difficulty      Moderate                Super Easy              Moderate
+
+--------------------------------------------------------------------------------
+
+4. MY RECOMMENDATION
+--------------------
+- For Beginners: Use Unsloth. It makes fine-tuning simple and fast on consumer GPUs.
+- For Researchers: Use Hugging Face. Gives full Python code control over loss functions and layers.
+- For Enterprise MLOps: Use Axolotl. YAML configurations make training experiments 100% reproducible.
+
+Official Links:
+- Hugging Face PEFT: https://huggingface.co/docs/peft
+- Unsloth AI GitHub: https://github.com/unslothai/unsloth
+- Axolotl AI GitHub: https://github.com/axolotl-ai-cloud/axolotl
+================================================================================

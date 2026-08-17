@@ -1,0 +1,76 @@
+================================================================================
+ASSIGNMENT NOTES: CLOSED VS OPEN SOURCE VS OPEN WEIGHT MODELS
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 24 July 2026
+================================================================================
+
+1. WHAT'S THE DIFFERENCE?
+-------------------------
+In the LLM world, models fall into three main buckets based on how open they are:
+
+1. Closed Models (Proprietary)
+   - You only get API access (Cloud endpoint).
+   - No access to model weights, code, or training datasets.
+   - Examples: GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro.
+
+2. Open Weight Models
+   - Model weights (parameters) are freely downloadable.
+   - You can run them locally, fine-tune them, and host them on your own servers.
+   - Training datasets and code are usually kept private or subject to custom licenses.
+   - Examples: Llama 3.1, Mistral 7B, Qwen 2.5.
+
+3. Open Source Models (True OSI-Compliant)
+   - 100% open: Downloadable weights + FULL training code + raw dataset recipes + permissive license (Apache 2.0 / MIT).
+   - Fully reproducible by anyone.
+   - Examples: Allen Institute OLMo, EleutherAI Pythia, BLOOM.
+
+--------------------------------------------------------------------------------
+
+2. COMPARISON TABLE
+-------------------
+
+Feature               Closed Models          Open Weight Models      Open Source Models
+--------------------  ---------------------  ----------------------  ---------------------
+Weights Downloadable  NO                     YES                     YES
+Training Code & Data  NO (Secret)            Partial / Undisclosed   YES (100% Open)
+Licensing             Commercial API Terms   Custom Open License     OSI (Apache 2.0/MIT)
+Fine-Tuning           Limited API tuning     Full (LoRA/QLoRA)       Full (Custom pre-train)
+Data Sovereignty      Vendor Dependent       Complete Sovereignty    Complete Sovereignty
+GPU Hardware Needed   Zero (Cloud hosted)    Required (Self-hosted)  Required (Self-hosted)
+
+--------------------------------------------------------------------------------
+
+3. PROS & CONS OF EACH
+----------------------
+
+Closed Models:
++ Top performance on complex benchmarks.
++ Zero GPU cluster setup or hardware maintenance needed.
+- High token costs at scale and potential vendor lock-in.
+- Sensitive data leaves your network to an external API.
+
+Open Weight Models:
++ Total data privacy and offline/air-gapped hosting options.
++ Can fine-tune on custom domain datasets.
+- Requires GPU infrastructure (NVIDIA A100/H100 or RTX consumer cards).
+- Some licenses have commercial user limits (e.g. Meta Llama 700M active user rule).
+
+Open Source Models:
++ Complete scientific transparency and zero licensing restrictions.
++ Perfect for academic research and building custom foundation models from scratch.
+- Can lag slightly behind venture-backed models in raw benchmark performance.
+
+--------------------------------------------------------------------------------
+
+4. WHEN TO USE WHICH? (DECISION GUIDE)
+--------------------------------------
+- Use Closed API Models if you are building an MVP quickly, need state-of-the-art vision/multimodal features, and don't want to manage GPUs.
+- Use Open Weight Models if you need enterprise data privacy, low-latency edge deployment, or predictable fixed server costs.
+- Use True Open Source Models if you are doing AI safety research, need fully auditable code/data, or want zero proprietary licensing risks.
+
+References:
+- OSI Open Source AI Definition: https://opensource.org/deepdive/drafts/open-source-ai-definition
+- Meta Llama 3.1 License Terms
+- Ai2 OLMo Paper: Accelerating the Science of Open Language Models
+================================================================================

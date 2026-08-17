@@ -1,0 +1,44 @@
+================================================================================
+ASSIGNMENT NOTES: DEVELOPING AGENTS IN VS CODE & GITHUB COPILOT ANALYSIS
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 27 July 2026
+================================================================================
+
+1. INTRODUCTION
+---------------
+GitHub Copilot has transformed developer workflows inside Visual Studio Code from basic autocompletion into agentic AI assistance. This document analyzes the positives, negatives, and agentic development capabilities of GitHub Copilot.
+
+--------------------------------------------------------------------------------
+
+2. POSITIVES OF GITHUB COPILOT
+------------------------------
++ Accelerated Developer Velocity: Generates inline code suggestions, docstrings, and unit tests automatically in real time.
++ Natural Language to Code: Converts plain text comments directly into working Python, JavaScript, and SQL functions.
++ Workspace Context Awareness: Scans active files and open editor tabs to generate contextually accurate completions.
++ Multi-Model Selection: Integrates modern foundation models (Claude 3.5 Sonnet, GPT-4o) directly inside VS Code Chat.
++ Reduced Syntax Friction: Instantly provides boilerplate code for REST APIs, regex, and complex data transformations.
+
+--------------------------------------------------------------------------------
+
+3. NEGATIVES & LIMITATIONS OF GITHUB COPILOT
+--------------------------------------------
+- Risk of Hallucinations & Deprecated APIs: Occasionally suggests outdated package methods or non-existent library functions.
+- Context Window Bottlenecks: Can struggle to understand large multi-repository projects without explicit prompt scoping.
+- Security & IP Concerns: Risk of introducing unvetted code patterns or sensitive keys if guardrails are not enabled.
+- Over-Reliance Risk: Junior developers may copy-paste generated code without validating edge cases or performance impacts.
+
+--------------------------------------------------------------------------------
+
+4. DEVELOPING AGENTS IN VS CODE WITH COPILOT
+--------------------------------------------
+- Agentic Chat Commands: Using @workspace and /explain, /fix, or /tests commands inside VS Code Chat to automate multi-file refactoring.
+- Custom Agent Tooling: Coupling Copilot Chat with Model Context Protocol (MCP) servers to allow Copilot to execute local terminal commands and query local databases.
+
+--------------------------------------------------------------------------------
+
+5. MY PERSONAL TAKEAWAY
+----------------------
+GitHub Copilot is a powerful force multiplier for developers in VS Code. While it excels at accelerating routine coding tasks, developers must remain active reviewers to verify security and code correctness.
+
+================================================================================

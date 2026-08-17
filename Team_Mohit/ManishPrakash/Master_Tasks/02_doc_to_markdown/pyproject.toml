@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docmd"
+version = "1.0.0"
+description = "Convert documents to markdown and ingest them into AnythingLLM"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+markitdown = ["markitdown>=0.0.1a2"]
+docling = ["docling>=2.0.0"]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+docmd = "docmd.cli:main"
+
+[tool.setuptools]
+packages = ["docmd"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,73 @@
+================================================================================
+ASSIGNMENT NOTES: PRIVACY POLICIES OF MAJOR LLM PROVIDERS
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 24 July 2026
+================================================================================
+
+1. OVERVIEW & WHY PRIVACY MATTERS
+---------------------------------
+When using LLMs in enterprise projects, data privacy is a huge deal. You need to know:
+- Is your confidential prompt data stored?
+- Are providers using your data to train their future models?
+- What compliance standards (GDPR, SOC2, HIPAA) do they support?
+
+Here's my breakdown of OpenAI, Google (Gemini), and Anthropic (Claude).
+
+--------------------------------------------------------------------------------
+
+2. PROVIDER BREAKDOWN
+---------------------
+
+A) OpenAI
+- Consumer Tier (ChatGPT Free / Plus / Team): Used for model training by default unless you manually opt out in settings.
+- API & Enterprise Tier (ChatGPT Enterprise / OpenAI API): NEVER used for model training by default. Data kept for 30 days for abuse monitoring, then deleted. Zero Data Retention (ZDR) available for qualifying enterprise endpoints.
+
+B) Google (Gemini)
+- Consumer Gemini (Free / Advanced): Conversations are logged and may be reviewed by human reviewers to train models.
+- Enterprise & Vertex AI: 100% strict data isolation. Customer data submitted to Google Cloud Vertex AI or Workspace Enterprise is NEVER used for model training and stays inside your cloud perimeter.
+
+C) Anthropic (Claude)
+- Consumer Tier (Claude.ai): Free tier feedback may be used; Pro tier paid users are opted out of model training by default.
+- Commercial & API Tier (Claude API / Enterprise): NEVER trained on customer API prompts or outputs. 30-day retention for safety monitoring, with custom Zero Data Retention agreements available.
+
+--------------------------------------------------------------------------------
+
+3. QUICK COMPARISON MATRIX
+--------------------------
+
+Provider      Consumer Training    API Training    Retention    Zero Data Retention
+------------  ------------------  --------------  -----------  -------------------
+OpenAI        Yes (Opt-out)       NO              30 Days      Yes (Enterprise)
+Google        Yes (Human review)  NO              0-30 Days    Native (Vertex AI)
+Anthropic     Yes (Free tier)     NO              30 Days      Yes (Custom)
+
+--------------------------------------------------------------------------------
+
+4. COMPLIANCE & SECURITY STANDARDS
+----------------------------------
+- SOC 2 Type II: Supported by OpenAI Enterprise, Google Cloud Vertex, and Anthropic.
+- GDPR Compliance: All three support Data Processing Addendums (DPAs) and EU data standards.
+- HIPAA (Healthcare): BAA available across OpenAI Enterprise, Google Cloud, and Anthropic Enterprise.
+- ISO 27001: Verified for all three enterprise/cloud platforms.
+
+--------------------------------------------------------------------------------
+
+5. BEST PRACTICES FOR ENTERPRISE DATA PRIVACY
+---------------------------------------------
+1. Never put sensitive company code or PII into consumer chat windows (free ChatGPT/Gemini).
+2. Always use API endpoints or Enterprise plans where training on your data is strictly disabled.
+3. Mask PII & sensitive data (use anonymization proxies like Microsoft Presidio before calling APIs).
+4. Host through Cloud Hyperscalers (Azure OpenAI, AWS Bedrock, GCP Vertex AI) to keep data inside your existing VPC.
+
+--------------------------------------------------------------------------------
+
+6. MY PERSONAL TAKEAWAY
+----------------------
+For personal use, watch out for default training toggles in free apps. For commercial apps, always stick to API / Cloud Enterprise services where training is turned OFF by default.
+
+Official Privacy Links:
+- OpenAI Privacy: https://openai.com/enterprise-privacy
+- Google Cloud Vertex AI Governance: https://cloud.google.com/vertex-ai/docs/general/data-governance
+- Anthropic Commercial Terms: https://www.anthropic.com/legal/commercial-terms
+================================================================================

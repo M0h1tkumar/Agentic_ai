@@ -1,0 +1,83 @@
+================================================================================
+ASSIGNMENT NOTES: MODERN AI MODEL FORMATS & GGUF ARCHITECTURE
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 24 July 2026
+================================================================================
+
+1. WHAT ARE AI MODEL FORMATS?
+-----------------------------
+AI model formats dictate how neural network weights, architectures, and computational graphs are saved on disk. Choosing the right format controls loading speed, RAM/VRAM usage, and security.
+
+--------------------------------------------------------------------------------
+
+2. BREAKDOWN OF MODERN FORMATS
+------------------------------
+
+1. GGUF (GPT-Generated Unified Format)
+   - Created by Georgi Gerganov & llama.cpp team.
+   - Built specifically for running quantized LLMs locally on CPUs and consumer GPUs.
+   - Packs weights, tokenizer vocabulary, and metadata into a SINGLE binary file.
+   - Supports mmap (instant memory mapping) and CPU/GPU layer offloading.
+
+2. GGML (GPT-Generated Model Language)
+   - Predecessor to GGUF. Now DEPRECATED.
+   - Rigid structure that broke compatibility whenever new metadata was added.
+
+3. SafeTensors
+   - Created by Hugging Face to replace dangerous PyTorch pickles.
+   - Stores raw tensors safely with zero risk of executing arbitrary code on load.
+   - Standard format for model weights on Hugging Face Hub.
+
+4. PyTorch Checkpoints (.pt / .pth)
+   - Native PyTorch format based on Python pickle serialization.
+   - SECURITY RISK: Loading untrusted .pt files can execute malicious Python code.
+
+5. ONNX (Open Neural Network Exchange)
+   - Open standard created by Microsoft & Meta for cross-platform model export.
+   - Great for deploying traditional ML models across CPU/GPU edge engines.
+
+6. TensorFlow SavedModel
+   - Standard Google directory format (.pb) for TensorFlow Serving.
+
+7. TensorRT Engine (.engine)
+   - NVIDIA's binary execution engine optimized specifically for NVIDIA CUDA GPUs.
+   - Delivers maximum throughput and lowest latency for high-speed cloud APIs.
+
+--------------------------------------------------------------------------------
+
+3. COMPARISON TABLE
+-------------------
+
+Format        Security Risk    Single File?    CPU/GPU Offload    Primary Target
+------------  ---------------  --------------  -----------------  -------------------
+GGUF          Safe / Low       YES             Native CPU + GPU   Local LLMs (llama.cpp)
+GGML          Safe / Low       YES             Limited CPU        Deprecated
+SafeTensors   100% Safe        YES             Framework Dependent Model Sharing (HF)
+PyTorch (.pt) DANGEROUS        YES             Framework Dependent Internal Training
+ONNX          Safe / Low       NO (Folder/File)Cross-Platform     Edge / Cross-Framework
+TensorRT      Safe / Low       YES (Binary)    NVIDIA GPU Only    Cloud Production APIs
+
+--------------------------------------------------------------------------------
+
+4. WHY GGUF WON LOCAL INFERENCE
+-------------------------------
+GGUF is the undisputed king of local LLMs (Ollama, LM Studio, llama.cpp) because:
+- Single-File Distribution: Contains everything (weights + prompt format + tokenizer).
+- Flexible Quantization: Fits 7B/8B models into 4GB VRAM using Q4_K_M or Q5_K_M precision.
+- Smart Memory Mapping (mmap): Models load instantly without long RAM copying delays.
+- Hybrid Offloading: Offloads 20 layers to GPU VRAM and keeps remaining layers in system RAM seamlessly.
+
+--------------------------------------------------------------------------------
+
+5. DEPLOYMENT SUMMARY
+---------------------
+- For Local Laptops / Offline Apps -> Use GGUF (via Ollama or llama.cpp)
+- For Cloud High-Speed NVIDIA GPUs  -> Use TensorRT Engine or SafeTensors + vLLM
+- For Sharing Model Checkpoints    -> Use SafeTensors
+
+References:
+- llama.cpp GGUF Specification
+- Hugging Face SafeTensors Docs
+- NVIDIA TensorRT Developer Guide
+================================================================================

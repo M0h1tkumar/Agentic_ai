@@ -1,0 +1,115 @@
+================================================================================
+ASSIGNMENT NOTES: CHATBOT VS AI AGENT
+Name: Ayush
+Course: Agentic AI Workshop
+Date: 23 July 2026
+================================================================================
+
+1. QUICK OVERVIEW
+-----------------
+Basically, the biggest shift happening in AI right now is moving from standard Chatbots to full AI Agents. 
+
+- Chatbot: An informational bot you talk to. It takes your prompt, thinks for a second, and gives you a text response.
+- AI Agent: An autonomous system that actually DOES things for you. It takes a goal, plans sub-tasks, calls external APIs/tools, checks its own work, and completes the task on its own.
+
+--------------------------------------------------------------------------------
+
+2. WHAT IS A CHATBOT?
+---------------------
+A Chatbot is a conversational interface that simulates human text or voice dialogue. 
+- Operates reactively (only speaks when spoken to).
+- Relies on sliding conversation memory or simple database lookup (RAG).
+- Restricted scope: mostly just generates text, answers questions, or triggers single pre-set actions.
+
+Examples: ChatGPT Web UI, basic customer service bots.
+
+--------------------------------------------------------------------------------
+
+3. WHAT IS AN AI AGENT?
+-----------------------
+An AI Agent is an autonomous problem solver built on top of an LLM engine.
+- Proactive & Goal-Driven: Give it an objective like "Fix bug #402 in Git and submit a PR" and it works independently.
+- Reasoning & Planning: Uses frameworks like ReAct (Reason + Act) or Plan-and-Execute to break big goals into smaller steps.
+- Tool Integration: Can run terminal commands, search databases, write files, and call REST APIs / MCP servers.
+- Reflection & Self-Correction: If a step fails, it reads the error log, figures out what went wrong, and tries a different approach automatically.
+
+Examples: Devin (AI Software Engineer), AutoGPT, GitHub Copilot Workspace.
+
+--------------------------------------------------------------------------------
+
+4. ARCHITECTURE COMPARISON
+--------------------------
+
+[Chatbot Architecture Flow]
+User Prompt ---> API Gateway ---> History / Context ---> LLM ---> Text Output
+
+[AI Agent Architecture Flow]
+Goal ---> Cognitive Engine (LLM Brain + Planner)
+                |
+                +---> Memory (Short-Term Context + Long-Term Vector DB)
+                +---> Action Layer (Tools, APIs, Code Sandbox, MCP Servers)
+                +---> Reflection Loop (Detects errors -> Replans)
+                |
+                v
+          Completed Goal / Output
+
+--------------------------------------------------------------------------------
+
+5. WORKFLOW STEP-BY-STEP COMPARISON
+-----------------------------------
+
+Chatbot Workflow (Linear 1-to-1):
+1. User: "How do I fix bug #402?"
+2. Chatbot: "Here are general steps to fix bug #402..."
+
+AI Agent Workflow (Autonomous Loop):
+1. User: "Fix bug #402 and create a PR."
+2. Agent reads GitHub issue #402 details via API.
+3. Agent searches codebase for error symbols.
+4. Agent edits code file and runs unit tests in sandbox.
+5. Unit test fails -> Agent reflects on error log, fixes code, re-runs tests.
+6. Unit tests pass -> Agent commits code and opens GitHub PR #89.
+7. Agent: "Fixed bug #402! Opened PR #89 with all tests passing."
+
+--------------------------------------------------------------------------------
+
+6. KEY DIFFERENCES SUMMARY
+--------------------------
+
+Feature               Chatbot                       AI Agent
+--------------------  ----------------------------  ----------------------------
+Primary Focus         Conversational Q&A            Autonomous Task Execution
+Control Flow          Reactive (Human-driven)       Proactive (Goal-driven loop)
+Planning              None (Single-pass text)       Multi-step planning & ReAct
+Tool Usage            Static / Limited              Dynamic (APIs, Code, MCP)
+Memory                Session Chat History          Persistent Graph & Vector DB
+Error Handling        Asks human to rephrase        Self-reflection & Auto-retry
+
+--------------------------------------------------------------------------------
+
+7. ADVANTAGES & LIMITATIONS
+---------------------------
+
+Chatbot Pros & Cons:
++ Fast response time and lower token cost.
++ Easy to deploy.
+- Can't execute real-world tasks or edit external systems.
+- Forgets long conversation threads.
+
+AI Agent Pros & Cons:
++ Solves complex end-to-end tasks without constant human prompting.
++ Can use tools, write code, query databases, and call APIs.
+- Higher token cost and higher latency (runs in multi-step loops).
+- Needs good safety guardrails to avoid unintended side effects.
+
+--------------------------------------------------------------------------------
+
+8. MY PERSONAL TAKEAWAY
+----------------------
+Chatbots answer questions, but AI Agents do actual work. For enterprise workflows, agents are the future because they connect natural language reasoning directly with real-world execution.
+
+References:
+- Yao et al. (2022) ReAct Paper: Synergizing Reasoning and Acting in LLMs
+- Lilian Weng (OpenAI) LLM Powered Autonomous Agents
+- Anthropic Research: Building Effective Agents
+================================================================================
