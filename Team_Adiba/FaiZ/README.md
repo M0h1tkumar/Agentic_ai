@@ -15,11 +15,7 @@ Windows
 │   ├── Knowledge Base / RAG System
 │   ├── Document Management
 │   └── Local AI Chat Interface
-│
-├── OpenClaw
-│   ├── AI Agent Execution
-│   └── Automation Workflows
-│
+|
 ├── LM Studio
 │   └── Local LLM Server
 │
@@ -36,6 +32,10 @@ WSL Ubuntu
 ├── OpenCode
 │   ├── AI Coding Agent
 │   └── Development Assistant
+│
+├── OpenClaw
+│   ├── AI Agent Execution
+│   └── Automation Workflows
 │
 ├── PostgreSQL
 │
@@ -138,7 +138,7 @@ This automatically:
 ### Frontend
 
 ```
-http://localhost:3000
+http://localhost:3001
 ```
 
 ### Backend API
@@ -181,16 +181,8 @@ OpenClaw is used for AI agent execution and automation.
 Current setup:
 
 ```
-Windows
+WSL
 ```
-
-Future consideration:
-
-Move to WSL for tighter integration with:
-
-* MultiCA
-* OpenCode
-* Local development workflows
 
 ---
 
@@ -227,7 +219,7 @@ Fine Tuned Model: https://huggingface.co/mr7stark/llama-3.2-3b-college-faq-gguf/
 | Service          | Location | Port |
 | ---------------- | -------- | ---- |
 | AnythingLLM      | Windows  | 3000 |
-| MultiCA Frontend | WSL      | 3000 |
+| MultiCA Frontend | WSL      | 3001 |
 | MultiCA Backend  | WSL      | 8080 |
 | PostgreSQL       | WSL      | 5432 |
 
@@ -271,4 +263,3 @@ Create a unified AI development environment where:
 * **Local LLMs / APIs** provide intelligence
 
 A complete personal AI engineering workspace.
->>>>>>> 6e7cb5b (Update FaiZ workspace README)

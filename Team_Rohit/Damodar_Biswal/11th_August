@@ -1,0 +1,36 @@
+Q--> what is the advantage and drawback of using external mcp?
+
+Advantages and Drawbacks of Using External MCP
+
+An external MCP (Model Context Protocol) server is an MCP server hosted or maintained outside your main AI application. It allows your AI agent to access external tools, services, or data without building everything yourself.
+
+Advantages
+
+
+Easy Integration
+You can connect existing tools and services to your AI agent without developing every integration from scratch.
+Saves Development Time
+External MCP servers provide ready-made tools, reducing the amount of coding and configuration required.
+Access to More Tools
+An AI agent can easily access services such as GitHub, databases, file systems, search tools, and cloud services.
+Reusable
+The same MCP server can potentially be used by multiple AI applications or agents.
+Easy to Scale
+New capabilities can be added by connecting additional MCP servers instead of changing the entire AI application.
+
+===================================================================================================================
+
+
+Drawbacks
+
+
+Security Risk
+An external MCP server may receive access to sensitive data or perform actions on your behalf. If it is poorly secured or malicious, it can create security problems.
+Dependency on Third Party
+If the external MCP server goes offline, changes its API, or stops being maintained, your AI agent may stop working properly.
+Privacy Concerns
+Data may pass through an external service, which can create privacy and data-sharing concerns.
+Less Control
+You may not have complete control over how the external MCP server handles requests, authentication, logs, or data.
+Performance Issues
+Because communication happens over a network, an external MCP server can introduce additional latency.

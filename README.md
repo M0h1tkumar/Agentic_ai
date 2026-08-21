@@ -1,3 +1,50 @@
+13 Aug (Task)
+
+1. What is the difference between STDIO and Streamable HTTP
+2. Research about MCP
+3. Create a Squad including the other agents so that the Orchestrator Agent can coordinate their tasks
+
+---
+
+11 Aug (Task)
+
+Exercise #1 : 
+
+
+Explainer_Agent
+
+
+Objective: A Multica agent that answers questions about people, places, topics, and events using live Wikipedia lookups, and can retrieve specific article sections on request.
+MCP Server to be Used: @cyanheads/wikipedia-mcp-server 
+Skill: Define the skill
+Finally Assign the task to Explainer_Agent : Give me a summary of Mahatma Gandhi, list which Wikipedia sections exist,
+and also share the "Legacy" section's content.
+
+
+Exercise #2
+
+
+Please create and deploy the following Agents in Multica instance in your own environment. 
+You may wish to create the below agents either in group or individual as per your choice.
+
+1. Currency_Converter_Agent.
+Issue to be assigned : Convert 500 USD to INR and also show today's rate for EUR to INR.
+
+2. World_Clock_Agent:
+Issue to the Agent: What time is it right now in Tokyo, London, and New York?
+
+3. Definition_Agent:
+Issue to the Agent: Define 'ubiquitous' and use it in an example sentence.
+
+4. HackerNews_Digest_Agent
+Issue: Give me the top 5 Hacker News stories right now with their scores
+
+5. GitHub_Repo_Agent
+Issue: How many open issues does the anthropics/claude-code repo have, and what are the 3 most recently updated ones?
+
+
+---
+
 6 August (Task)
 
 1. What is the difference between API and MCP (also write the drawback of API over MCP)

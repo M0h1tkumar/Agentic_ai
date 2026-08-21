@@ -1,0 +1,14 @@
+{
+  "name": "groq-weather-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "dotenv": "^17.4.2",
+    "groq-sdk": "^1.5.0"
+  }
+}

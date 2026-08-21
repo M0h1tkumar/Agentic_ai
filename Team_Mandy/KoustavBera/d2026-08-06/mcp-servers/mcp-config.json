@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "anythingllm-rag": {
+      "command": "node",
+      "args": ["/home/koustavbera/mcp-servers/anythingllm-rag/index.js"],
+      "env": {
+        "ANYTHINGLLM_BASE_URL": "http://localhost:3001",
+        "ANYTHINGLLM_API_KEY": "NJHGDNM-BFF4AT2-QBEM0EN-A0TDEQS"
+      }
+    },
+    "bhubaneswar-weather": {
+      "command": "node",
+      "args": ["/home/koustavbera/mcp-servers/bhubaneswar-weather/index.js"]
+    }
+  }
+}

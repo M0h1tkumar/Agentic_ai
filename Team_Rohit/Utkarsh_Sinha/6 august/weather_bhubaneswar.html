@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bhubaneswar Weather Predictor</title>
+  <meta name="description" content="Real-time weather dashboard and 5-day forecast for Bhubaneswar, Odisha, India."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: rgba(255,255,255,0.05);
+      --surface2: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.1);
+      --accent: #4f9cf9;
+      --accent2: #7b61ff;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --green: #22c55e;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --rain: #60a5fa;
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    .bg-anim {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-anim::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(79,156,249,0.12) 0%, transparent 70%);
+      top: -200px; left: -200px;
+      animation: float1 12s ease-in-out infinite;
+    }
+    .bg-anim::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,97,255,0.1) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+      animation: float2 15s ease-in-out infinite;
+    }
+    @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,60px)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,-80px)} }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      font-size: 2rem;
+      animation: spin 20s linear infinite;
+    }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .logo h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .logo p { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+
+    #last-updated {
+      font-size: 0.75rem;
+      color: var(--text2);
+      text-align: right;
+    }
+    #last-updated span { color: var(--green); font-weight: 600; }
+
+    /* Main card */
+    .main-card {
+      background: linear-gradient(135deg, rgba(79,156,249,0.15), rgba(123,97,255,0.1));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    @media(max-width:700px){ .main-card{grid-template-columns:1fr;gap:24px;padding:28px;} }
+
+    .current-temp {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .weather-emoji {
+      font-size: 5rem;
+      line-height: 1;
+      animation: pulse-emoji 3s ease-in-out infinite;
+    }
+    @keyframes pulse-emoji { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    .temp-value {
+      font-size: 4.5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(180deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .temp-unit { font-size: 1.5rem; font-weight: 400; color: var(--text2); margin-top: 8px; }
+    .weather-desc { font-size: 1.1rem; font-weight: 500; color: var(--text); margin-top: 6px; }
+    .feels-like { font-size: 0.85rem; color: var(--text2); margin-top: 4px; }
+
+    .current-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .stat-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .stat-item:hover { transform: translateY(-2px); background: var(--surface2); }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .stat-value { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .stat-icon { font-size: 1.1rem; margin-bottom: 4px; }
+
+    /* Alert banner */
+    .alert-banner {
+      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1));
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      animation: slide-in 0.5s ease;
+    }
+    @keyframes slide-in { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+    .alert-icon { font-size: 1.4rem; }
+    .alert-text strong { color: var(--warn); }
+
+    /* Section titles */
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text2);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Hourly forecast */
+    .hourly-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .hour-card {
+      flex: 0 0 80px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 8px;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .hour-card.active {
+      background: linear-gradient(135deg, rgba(79,156,249,0.2), rgba(123,97,255,0.15));
+      border-color: var(--accent);
+    }
+    .hour-card:hover { transform: translateY(-4px); background: var(--surface2); }
+    .hour-time { font-size: 0.7rem; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+    .hour-emoji { font-size: 1.4rem; margin-bottom: 6px; }
+    .hour-temp { font-size: 0.9rem; font-weight: 700; }
+    .hour-rain { font-size: 0.65rem; color: var(--rain); margin-top: 3px; }
+
+    /* 5-day forecast */
+    .forecast-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media(max-width:700px){ .forecast-grid{grid-template-columns:repeat(2,1fr);} }
+
+    .forecast-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 12px;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .forecast-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .forecast-day { font-size: 0.75rem; font-weight: 600; color: var(--text2); margin-bottom: 10px; text-transform: uppercase; }
+    .forecast-emoji { font-size: 2.2rem; margin-bottom: 10px; }
+    .forecast-temps { display: flex; justify-content: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+    .forecast-high { color: var(--warn); }
+    .forecast-low { color: var(--text2); }
+    .forecast-desc { font-size: 0.7rem; color: var(--text2); margin-top: 6px; }
+    .forecast-rain { font-size: 0.7rem; color: var(--rain); margin-top: 4px; }
+
+    /* Charts section */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    @media(max-width:700px){ .charts-grid{grid-template-columns:1fr;} }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .chart-title { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 16px; }
+
+    /* Simple bar chart */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; }
+    .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      transition: height 1s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      cursor: pointer;
+    }
+    .bar:hover { filter: brightness(1.3); }
+    .bar-label { font-size: 0.6rem; color: var(--text2); text-align: center; }
+    .bar-val { font-size: 0.65rem; color: var(--text2); }
+
+    /* UV + AQI gauges */
+    .gauge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .gauge-item {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .gauge-label { font-size: 0.7rem; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .gauge-value { font-size: 1.8rem; font-weight: 800; }
+    .gauge-desc { font-size: 0.7rem; margin-top: 4px; }
+    .uv-low { color: var(--green); }
+    .uv-mod { color: #a3e635; }
+    .uv-high { color: var(--warn); }
+    .uv-vhigh { color: #f97316; }
+    .uv-extreme { color: var(--danger); }
+
+    /* Sun times */
+    .sun-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .sun-timeline {
+      position: relative;
+      height: 60px;
+      background: linear-gradient(90deg, #1e1b4b 0%, #f97316 30%, #fbbf24 50%, #f97316 70%, #1e1b4b 100%);
+      border-radius: 30px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .sun-dot {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px; height: 20px;
+      background: #fbbf24;
+      border-radius: 50%;
+      box-shadow: 0 0 20px 8px rgba(251,191,36,0.5);
+      animation: sun-glow 2s ease-in-out infinite;
+    }
+    @keyframes sun-glow { 0%,100%{box-shadow:0 0 20px 8px rgba(251,191,36,0.5)} 50%{box-shadow:0 0 30px 12px rgba(251,191,36,0.7)} }
+    .sun-times { display: flex; justify-content: space-between; font-size: 0.85rem; }
+    .sun-time strong { font-weight: 700; color: var(--warn); }
+
+    /* Tips section */
+    .tips-card {
+      background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(79,156,249,0.08));
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+    .tip-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 60px;
+      color: var(--text2);
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text2);
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* Toggle unit button */
+    .unit-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .unit-toggle:hover { background: var(--surface2); border-color: var(--accent); }
+
+    /* Refresh button */
+    .refresh-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      margin-left: 8px;
+    }
+    .refresh-btn:hover { opacity: 0.85; transform: scale(1.03); }
+  </style>
+</head>
+<body>
+  <div class="bg-anim"></div>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🌤️</div>
+        <div>
+          <h1>Bhubaneswar Weather</h1>
+          <p>Odisha, India · 20.27°N 85.83°E · Elevation 45m</p>
+        </div>
+      </div>
+      <div>
+        <div id="last-updated">Last updated: <span id="update-time">—</span></div>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px;">
+          <button class="unit-toggle" id="unitToggle" onclick="toggleUnit()">°C / °F</button>
+          <button class="refresh-btn" onclick="loadWeather()">🔄 Refresh</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="alert-container"></div>
+
+    <div id="main-content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>Fetching Bhubaneswar weather data…</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LAT = 20.2961;
+    const LON = 85.8245;
+    let isCelsius = true;
+    let weatherData = null;
+
+    function toF(c) { return (c * 9/5 + 32).toFixed(1); }
+    function displayTemp(c) { return isCelsius ? Math.round(c) + '°C' : Math.round(toF(c)) + '°F'; }
+
+    function toggleUnit() {
+      isCelsius = !isCelsius;
+      document.getElementById('unitToggle').textContent = isCelsius ? '°C / °F' : '°F / °C';
+      if (weatherData) renderAll(weatherData);
+    }
+
+    // Weather code to emoji + description
+    function getWeatherInfo(code, isDay=true) {
+      const map = {
+        0:  { emoji: isDay?'☀️':'🌙', desc: 'Clear Sky' },
+        1:  { emoji: isDay?'🌤️':'🌙', desc: 'Mainly Clear' },
+        2:  { emoji: '⛅', desc: 'Partly Cloudy' },
+        3:  { emoji: '☁️', desc: 'Overcast' },
+        45: { emoji: '🌫️', desc: 'Foggy' },
+        48: { emoji: '🌫️', desc: 'Icy Fog' },
+        51: { emoji: '🌦️', desc: 'Light Drizzle' },
+        53: { emoji: '🌦️', desc: 'Moderate Drizzle' },
+        55: { emoji: '🌧️', desc: 'Dense Drizzle' },
+        61: { emoji: '🌧️', desc: 'Slight Rain' },
+        63: { emoji: '🌧️', desc: 'Moderate Rain' },
+        65: { emoji: '🌧️', desc: 'Heavy Rain' },
+        71: { emoji: '🌨️', desc: 'Slight Snow' },
+        73: { emoji: '❄️', desc: 'Moderate Snow' },
+        75: { emoji: '❄️', desc: 'Heavy Snow' },
+        77: { emoji: '🌨️', desc: 'Snow Grains' },
+        80: { emoji: '🌦️', desc: 'Light Showers' },
+        81: { emoji: '🌧️', desc: 'Moderate Showers' },
+        82: { emoji: '⛈️', desc: 'Violent Showers' },
+        85: { emoji: '🌨️', desc: 'Slight Snow Shower' },
+        86: { emoji: '❄️', desc: 'Heavy Snow Shower' },
+        95: { emoji: '⛈️', desc: 'Thunderstorm' },
+        96: { emoji: '⛈️', desc: 'Thunderstorm + Hail' },
+        99: { emoji: '⛈️', desc: 'Thunderstorm + Heavy Hail' },
+      };
+      return map[code] || { emoji: '🌡️', desc: 'Unknown' };
+    }
+
+    function getUVLabel(uv) {
+      if (uv < 3)  return { label: 'Low', cls: 'uv-low' };
+      if (uv < 6)  return { label: 'Moderate', cls: 'uv-mod' };
+      if (uv < 8)  return { label: 'High', cls: 'uv-high' };
+      if (uv < 11) return { label: 'Very High', cls: 'uv-vhigh' };
+      return { label: 'Extreme', cls: 'uv-extreme' };
+    }
+
+    function formatTime(iso) {
+      const d = new Date(iso);
+      return d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12: true });
+    }
+    function formatDay(iso) {
+      const d = new Date(iso);
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      return days[d.getDay()];
+    }
+    function formatHour(iso) {
+      const d = new Date(iso);
+      return d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12: true });
+    }
+
+    function getSunPosition(sunrise, sunset) {
+      const now = Date.now();
+      const rise = new Date(sunrise).getTime();
+      const set = new Date(sunset).getTime();
+      if (now < rise) return 2;
+      if (now > set) return 98;
+      return 2 + 96 * (now - rise) / (set - rise);
+    }
+
+    async function loadWeather() {
+      document.getElementById('main-content').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <span>Fetching Bhubaneswar weather data…</span>
+        </div>`;
+      document.getElementById('alert-container').innerHTML = '';
+
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,rain,weather_code,is_day,uv_index,pressure_msl,cloud_cover&hourly=temperature_2m,precipitation_probability,weather_code,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,sunrise,sunset,uv_index_max&timezone=Asia%2FKolkata&forecast_days=5`;
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('API error');
+        weatherData = await res.json();
+        renderAll(weatherData);
+        document.getElementById('update-time').textContent = new Date().toLocaleTimeString('en-IN');
+      } catch(e) {
+        document.getElementById('main-content').innerHTML = `
+          <div class="loading" style="flex-direction:column;gap:16px;">
+            <div style="font-size:2rem;">⚠️</div>
+            <div style="color:#ef4444;font-weight:600;">Unable to fetch live data</div>
+            <div style="font-size:0.8rem;color:var(--text2);">Showing simulated Bhubaneswar weather. Check your internet connection.</div>
+          </div>`;
+        renderMockData();
+      }
+    }
+
+    function renderMockData() {
+      // Realistic Bhubaneswar summer weather simulation
+      const mockDays = ['Mon','Tue','Wed','Thu','Fri'];
+      const mockTemps = [38,36,40,37,35];
+      const mockLows  = [27,26,28,27,25];
+      const mockCodes = [3,95,1,80,2];
+      const mockPrecip = [5,85,10,60,20];
+
+      const forecastHTML = mockDays.map((day,i) => {
+        const info = getWeatherInfo(mockCodes[i]);
+        return `
+          <div class="forecast-card">
+            <div class="forecast-day">${day}</div>
+            <div class="forecast-emoji">${info.emoji}</div>
+            <div class="forecast-temps">
+              <span class="forecast-high">${displayTemp(mockTemps[i])}</span>
+              <span class="forecast-low">${displayTemp(mockLows[i])}</span>
+            </div>
+            <div class="forecast-desc">${info.desc}</div>
+            <div class="forecast-rain">💧 ${mockPrecip[i]}%</div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('main-content').innerHTML = `
+        <div class="main-card">
+          <div class="current-temp">
+            <div class="weather-emoji">⛅</div>
+            <div>
+              <div style="display:flex;align-items:flex-start;gap:4px;">
+                <span class="temp-value">38</span>
+                <span class="temp-unit">${isCelsius?'°C':'°F'}</span>
+              </div>
+              <div class="weather-desc">Partly Cloudy</div>
+              <div class="feels-like">Feels like ${displayTemp(42)} · High humidity season</div>
+            </div>
+          </div>
+          <div class="current-stats">
+            <div class="stat-item"><div class="stat-icon">💧</div><div class="stat-label">Humidity</div><div class="stat-value">78%</div></div>
+            <div class="stat-item"><div class="stat-icon">💨</div><div class="stat-label">Wind</div><div class="stat-value">18 km/h</div></div>
+            <div class="stat-item"><div class="stat-icon">🌧️</div><div class="stat-label">Precip.</div><div class="stat-value">0 mm</div></div>
+            <div class="stat-item"><div class="stat-icon">🔵</div><div class="stat-label">Pressure</div><div class="stat-value">1008 hPa</div></div>
+          </div>
+        </div>
+        <p class="section-title">📅 5-Day Forecast</p>
+        <div class="forecast-grid">${forecastHTML}</div>`;
+    }
+
+    function renderAll(data) {
+      const c = data.current;
+      const daily = data.daily;
+      const hourly = data.hourly;
+      const info = getWeatherInfo(c.weather_code, c.is_day);
+      const sunPos = getSunPosition(daily.sunrise[0], daily.sunset[0]);
+
+      // Check for alerts
+      let alerts = [];
+      if (c.temperature_2m >= 40) alerts.push({ icon:'🌡️', msg: `<strong>Heat Alert:</strong> Temperature ${displayTemp(c.temperature_2m)} — Stay hydrated and avoid midday sun.` });
+      if ((daily.precipitation_probability_max?.[0] || 0) >= 70) alerts.push({ icon:'⛈️', msg: `<strong>Rain Alert:</strong> ${daily.precipitation_probability_max[0]}% chance of heavy rain today.` });
+      if ((c.uv_index || 0) >= 8) alerts.push({ icon:'☀️', msg: `<strong>UV Alert:</strong> UV Index ${Math.round(c.uv_index)} — Apply SPF 50+ sunscreen.` });
+
+      document.getElementById('alert-container').innerHTML = alerts.map(a => `
+        <div class="alert-banner">
+          <div class="alert-icon">${a.icon}</div>
+          <div class="alert-text">${a.msg}</div>
+        </div>`).join('');
+
+      // Current hour index
+      const nowHour = new Date().getHours();
+      const hourlyHTML = hourly.time.slice(0, 24).map((t, i) => {
+        const h = new Date(t).getHours();
+        const hInfo = getWeatherInfo(hourly.weather_code[i], h >= 6 && h < 19);
+        const isActive = h === nowHour;
+        return `
+          <div class="hour-card ${isActive ? 'active' : ''}">
+            <div class="hour-time">${formatHour(t)}</div>
+            <div class="hour-emoji">${hInfo.emoji}</div>
+            <div class="hour-temp">${displayTemp(hourly.temperature_2m[i])}</div>
+            <div class="hour-rain">💧 ${hourly.precipitation_probability[i] || 0}%</div>
+          </div>`;
+      }).join('');
+
+      // Forecast cards
+      const forecastHTML = daily.time.map((t, i) => {
+        const dInfo = getWeatherInfo(daily.weather_code[i]);
+        const isToday = i === 0;
+        return `
+          <div class="forecast-card" style="${isToday ? 'border-color:var(--accent);' : ''}">
+            <div class="forecast-day">${isToday ? 'TODAY' : formatDay(t)}</div>
+            <div class="forecast-emoji">${dInfo.emoji}</div>
+            <div class="forecast-temps">
+              <span class="forecast-high">${displayTemp(daily.temperature_2m_max[i])}</span>
+              <span class="forecast-low">${displayTemp(daily.temperature_2m_min[i])}</span>
+            </div>
+            <div class="forecast-desc">${dInfo.desc}</div>
+            <div class="forecast-rain">💧 ${daily.precipitation_probability_max[i] || 0}%</div>
+          </div>`;
+      }).join('');
+
+      // Bar chart data for 5-day rain probability
+      const maxPrecipProb = Math.max(...daily.precipitation_probability_max);
+      const barHTML = daily.time.map((t,i) => {
+        const h = Math.max(8, (daily.precipitation_probability_max[i] / 100) * 80);
+        const col = `hsl(${220 - (daily.precipitation_probability_max[i]/100)*60},70%,60%)`;
+        return `
+          <div class="bar-item">
+            <div class="bar-val">${daily.precipitation_probability_max[i]}%</div>
+            <div class="bar" style="height:${h}px;background:${col};" title="${formatDay(t)}: ${daily.precipitation_probability_max[i]}% rain"></div>
+            <div class="bar-label">${i===0?'Today':formatDay(t)}</div>
+          </div>`;
+      }).join('');
+
+      // Temp bar chart
+      const maxTemp = Math.max(...daily.temperature_2m_max);
+      const minTemp = Math.min(...daily.temperature_2m_min);
+      const tempBarHTML = daily.time.map((t,i) => {
+        const h = 20 + ((daily.temperature_2m_max[i] - minTemp) / (maxTemp - minTemp + 1)) * 70;
+        const col = `hsl(${30 + (daily.temperature_2m_max[i]/50)*30},85%,55%)`;
+        return `
+          <div class="bar-item">
+            <div class="bar-val">${displayTemp(daily.temperature_2m_max[i])}</div>
+            <div class="bar" style="height:${h}px;background:${col};"></div>
+            <div class="bar-label">${i===0?'Today':formatDay(t)}</div>
+          </div>`;
+      }).join('');
+
+      const uvInfo = getUVLabel(c.uv_index || 0);
+      const windDir = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+      const wdLabel = windDir[Math.round(c.wind_direction_10m / 22.5) % 16];
+
+      // Tips
+      const tips = [];
+      if (c.temperature_2m >= 38) tips.push({ icon:'🥤', text:'Stay hydrated — drink at least 3L of water today.' });
+      if ((daily.precipitation_probability_max?.[0] || 0) >= 50) tips.push({ icon:'☂️', text:'Carry an umbrella — rain is likely today.' });
+      if ((c.uv_index || 0) >= 6) tips.push({ icon:'🕶️', text:'Wear UV-protection sunglasses and SPF 50+ sunscreen.' });
+      tips.push({ icon:'🌡️', text:`Best time to go out: Early morning (6–9 AM) or after 6 PM.` });
+      if (c.relative_humidity_2m >= 70) tips.push({ icon:'💦', text:'High humidity — wear light, breathable cotton clothing.' });
+      tips.push({ icon:'🏃', text:'Outdoor exercise is best before 8 AM for comfort.' });
+
+      document.getElementById('main-content').innerHTML = `
+        <div class="main-card">
+          <div class="current-temp">
+            <div class="weather-emoji">${info.emoji}</div>
+            <div>
+              <div style="display:flex;align-items:flex-start;gap:4px;">
+                <span class="temp-value" id="cur-temp">${isCelsius ? Math.round(c.temperature_2m) : Math.round(toF(c.temperature_2m))}</span>
+                <span class="temp-unit">${isCelsius?'°C':'°F'}</span>
+              </div>
+              <div class="weather-desc">${info.desc}</div>
+              <div class="feels-like">Feels like ${displayTemp(c.apparent_temperature)}</div>
+              <div class="feels-like" style="margin-top:4px;">Precipitation: ${c.precipitation || 0} mm</div>
+            </div>
+          </div>
+          <div class="current-stats">
+            <div class="stat-item"><div class="stat-icon">💧</div><div class="stat-label">Humidity</div><div class="stat-value">${c.relative_humidity_2m}%</div></div>
+            <div class="stat-item"><div class="stat-icon">💨</div><div class="stat-label">Wind</div><div class="stat-value">${Math.round(c.wind_speed_10m)} km/h ${wdLabel}</div></div>
+            <div class="stat-item"><div class="stat-icon">🌧️</div><div class="stat-label">Rain</div><div class="stat-value">${c.rain || 0} mm</div></div>
+            <div class="stat-item"><div class="stat-icon">🔵</div><div class="stat-label">Pressure</div><div class="stat-value">${Math.round(c.pressure_msl)} hPa</div></div>
+          </div>
+        </div>
+
+        <p class="section-title">🕐 24-Hour Forecast</p>
+        <div class="hourly-scroll">${hourlyHTML}</div>
+
+        <p class="section-title">📅 5-Day Forecast</p>
+        <div class="forecast-grid">${forecastHTML}</div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-title">🌧️ Rain Probability (5-Day)</div>
+            <div class="bar-chart">${barHTML}</div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">🌡️ Max Temperature Trend</div>
+            <div class="bar-chart">${tempBarHTML}</div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-title">📊 Atmospheric Indices</div>
+            <div class="gauge-grid">
+              <div class="gauge-item">
+                <div class="gauge-label">UV Index</div>
+                <div class="gauge-value ${uvInfo.cls}">${Math.round(c.uv_index || 0)}</div>
+                <div class="gauge-desc ${uvInfo.cls}">${uvInfo.label}</div>
+              </div>
+              <div class="gauge-item">
+                <div class="gauge-label">Cloud Cover</div>
+                <div class="gauge-value" style="color:var(--text2);">${c.cloud_cover || 0}%</div>
+                <div class="gauge-desc" style="color:var(--text2);">${c.cloud_cover > 75 ? 'Very Cloudy' : c.cloud_cover > 40 ? 'Partly Cloudy' : 'Clear'}</div>
+              </div>
+              <div class="gauge-item">
+                <div class="gauge-label">Today's High UV</div>
+                <div class="gauge-value" style="color:var(--warn);">${Math.round(daily.uv_index_max?.[0] || 0)}</div>
+                <div class="gauge-desc" style="color:var(--warn);">${getUVLabel(daily.uv_index_max?.[0] || 0).label}</div>
+              </div>
+              <div class="gauge-item">
+                <div class="gauge-label">Today's Rain</div>
+                <div class="gauge-value" style="color:var(--rain);">${(daily.precipitation_sum?.[0] || 0).toFixed(1)}</div>
+                <div class="gauge-desc" style="color:var(--rain);">mm expected</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">🌅 Sun Schedule Today</div>
+            <div class="sun-timeline">
+              <div class="sun-dot" style="left:${sunPos}%"></div>
+            </div>
+            <div class="sun-times">
+              <div>🌅 Sunrise<br><strong>${formatTime(daily.sunrise[0])}</strong></div>
+              <div style="text-align:center;">🕐 Now<br><strong>${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</strong></div>
+              <div style="text-align:right;">🌇 Sunset<br><strong>${formatTime(daily.sunset[0])}</strong></div>
+            </div>
+            <div style="font-size:0.75rem;color:var(--text2);margin-top:12px;text-align:center;">
+              Daylight: ${Math.round((new Date(daily.sunset[0]) - new Date(daily.sunrise[0])) / 3600000 * 10) / 10} hours
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-card">
+          <p class="section-title" style="margin-bottom:0;">💡 Today's Weather Tips for Bhubaneswar</p>
+          <div class="tips-grid">
+            ${tips.map(t => `<div class="tip-item"><div class="tip-icon">${t.icon}</div><div>${t.text}</div></div>`).join('')}
+          </div>
+        </div>
+
+        <footer>
+          <p>Data sourced from <a href="https://open-meteo.com" target="_blank">Open-Meteo API</a> · Location: Bhubaneswar (Odisha) · Coordinates: 20.27°N, 85.83°E</p>
+          <p style="margin-top:6px;">Created for 6 August Task · Utkarsh Sinha · Team Rohit</p>
+        </footer>`;
+    }
+
+    // Auto-refresh every 10 minutes
+    loadWeather();
+    setInterval(loadWeather, 10 * 60 * 1000);
+  </script>
+</body>
+</html>
