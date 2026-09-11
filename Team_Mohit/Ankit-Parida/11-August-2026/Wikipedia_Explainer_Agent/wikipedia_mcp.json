@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "wikipedia": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-wikipedia"
+      ]
+    }
+  }
+}
