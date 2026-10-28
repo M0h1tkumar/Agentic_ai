@@ -1,0 +1,22 @@
+The core difference between STDIO and Streamable HTTP lies in their communication model, use case, and operational environment. It's a classic trade-off: one is designed for tight, local integration, while the other is built for distributed, network-based systems.
+
+1. Operational Scope & Environment
+STDIO: This is a local Inter-Process Communication (IPC) mechanism. The server runs as a subprocess spawned by the client (e.g., an IDE or CLI tool). They communicate directly via the process's standard input and output streams, without any network layer . It is confined to a single machine.
+
+Streamable HTTP: This is a network-based protocol. The server runs as a standalone service accessible via a URL. Clients connect over the network using standard HTTP requests. This allows for remote access, multi-client connections, and cloud deployments .
+
+2. Connection & Lifecycle
+STDIO: The connection is tied to the process lifecycle. The server lives as long as the parent process does. If the server crashes, it is generally not auto-restarted . Authentication is typically not needed as it relies on local trust between processes on the same machine .
+
+Streamable HTTP: The connection is managed via HTTP sessions. Servers are long-lived and independent of a single client. They support robust features like auto-reconnect with backoff if a connection drops and require security measures like bearer tokens or OAuth for authentication .
+
+3. Data Flow & Concurrency
+STDIO: Uses a simple, serialized data flow. Requests are often handled one at a time with a concurrency of 1 to avoid race conditions, making it unsuitable for multiple parallel requests .
+
+Streamable HTTP: Supports standard HTTP request/response patterns and advanced features like server-initiated streaming. This allows large datasets or file responses to be sent in chunks using HTTP Chunked Transfer Encoding, enabling real-time data processing by the client . It can also handle multiple concurrent connections, typically with a higher concurrency limit (e.g., 5 parallel requests) .
+
+4. Use Cases
+STDIO: Best for local development, CLI tools, and single-machine workflows. It is the default and simplest choice for tools like Claude Desktop, where the server is run on the developer's laptop .
+
+Streamable HTTP: Ideal for production, cloud deployments, and scenarios requiring remote access or scalability. It is the recommended transport for new remote deployments and supports multi-agent or multi-user setups .
+
