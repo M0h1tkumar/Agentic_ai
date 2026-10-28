@@ -1,0 +1,57 @@
+# STDIO vs Streamable HTTP
+
+These are two transport mechanisms most commonly discussed in the context of the **Model Context Protocol (MCP)**, which defines how a client (like an AI application) communicates with a server (which exposes tools, resources, or data).
+
+## Overview
+
+| Aspect | STDIO | Streamable HTTP |
+|---|---|---|
+| Communication channel | Standard input/output streams | HTTP requests/responses (with optional streaming) |
+| Process model | Server runs as a local subprocess of the client | Server runs independently, often remote |
+| Network required | No | Yes |
+| Typical use case | Local tools, CLI integrations, desktop apps | Remote services, multi-client servers, web-based deployments |
+| Session handling | Implicit (1 client = 1 process) | Explicit (session IDs, connection management) |
+| Scalability | Limited to local machine | Can serve many clients concurrently |
+
+## STDIO (Standard Input/Output)
+
+- The client **launches the server as a child process** and communicates by writing to its `stdin` and reading from its `stdout`.
+- Messages (typically JSON-RPC) are exchanged as line-delimited text over these streams.
+- `stderr` is usually reserved for logging/diagnostics, not protocol messages.
+- Because the server lives in the same machine/process tree as the client, there's no network layer, authentication, or port management to worry about.
+
+**Pros:**
+- Simple to set up — no networking, ports, or TLS.
+- Low latency (no network hop).
+- Naturally sandboxed to a single client/session.
+
+**Cons:**
+- Only works locally — can't be accessed by remote clients.
+- One server process per client session (harder to share state across clients).
+- Process lifecycle is tied to the client (if the client crashes, so does the server connection).
+
+## Streamable HTTP
+
+- The client and server communicate over standard **HTTP**, with the server exposing an endpoint the client sends requests to.
+- Unlike a single request/response model, it supports **streaming** — the server can push multiple messages (including asynchronous notifications) back over an open connection, often using techniques like chunked responses or Server-Sent Events (SSE).
+- A single server can handle **multiple concurrent client sessions**, distinguished via session IDs or headers.
+- This replaced the older "HTTP+SSE" transport in MCP to simplify having just one HTTP endpoint that supports both regular responses and streaming.
+
+**Pros:**
+- Works across networks — client and server can be on different machines.
+- One server instance can serve many clients.
+- Fits naturally into existing web infrastructure (load balancers, auth, TLS).
+
+**Cons:**
+- More complex to set up (hosting, auth, session management, security).
+- Slightly higher latency than local STDIO.
+- Requires handling reconnects, timeouts, and network failures.
+
+## When to Use Which
+
+- **Use STDIO** when the tool/server runs on the same machine as the client — e.g., a local CLI tool, a desktop app plugin, or a developer running a server during local development.
+- **Use Streamable HTTP** when the server needs to be shared across multiple users/clients, deployed remotely, or accessed over a network — e.g., a hosted SaaS integration or a company-wide internal tool server.
+
+## Summary
+
+STDIO is the simple, local, process-based transport ideal for single-user local setups, while Streamable HTTP is the network-capable transport designed for remote, multi-client, production-grade deployments.
